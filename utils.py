@@ -1,5 +1,4 @@
 # version 1.1
-# Helper library from https://www.coursera.org/learn/python-machine-learning/home/
 
 import numpy
 import pandas as pd
@@ -214,6 +213,7 @@ def plot_fruit_knn(X, y, n_neighbors, weights):
     plt.xlabel('height (cm)')
     plt.ylabel('width (cm)')
 
+    plt.savefig('decision_boundaries.jpg')
     plt.show()
 
 def plot_two_class_knn(X, y, n_neighbors, weights, X_test, y_test):
@@ -263,4 +263,4 @@ def plot_two_class_knn(X, y, n_neighbors, weights, X_test, y_test):
     plt.ylabel('Feature 1')
     plt.title(title)
 
-    plt.show()
+    # plt.show()

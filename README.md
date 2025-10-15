@@ -11,6 +11,16 @@ The project is based on an educational example from the *Applied Machine Learnin
 
 ---
 
+### Jupyter Notebook
+
+For a full walkthrough with code, outputs, and visualizations, see the
+Jupyter Notebook [KNN_fruit_detection.ipynb](KNN_fruit_detection.ipynb)
+
+Run the notebook online (no setup required):
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MahbubAlam231/machine-learning-scikit-learn-pandas/main?filepath=KNN_fruit_detection.ipynb)
+
+---
+
 ### Project Overview
 
 - **Goal:** Classify fruits based on features (weight, height, width, color score, etc.)
@@ -31,12 +41,3 @@ The dataset contains fruit samples with the following attributes:
 
 - Fruit label (apple, mandarin, orange, lemon)
 - Features: height, width, mass, color score
-
----
-
-### Jupyter Notebook
-
-For a full walkthrough with code, outputs, and visualizations, see the
-Jupyter Notebook [KNN_fruit_detection.ipynb](KNN_fruit_detection.ipynb)
-
-You can also run the notebook here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MahbubAlam231/machine-learning-scikit-learn-pandas/main?filepath=KNN_fruit_detection.ipynb)

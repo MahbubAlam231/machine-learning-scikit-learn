@@ -3,15 +3,26 @@
  Author(s)   : Mahbub Alam
  File        : Computer_Vision_in_Agriculture.py
  Created     : 2025-04-04 (Apr, Fri) 13:39:36 CEST
- Description : k-nearest neighbor classifier.# {{{
-A small script that trains and evaluates a k-nearest neighbors classifier for
-fruit detection.
+ Description : Machine learning pipeline for automated produce classification using k-Nearest Neighbors. # {{{
 
-# Purpose
--------
-- Load features/labels for fruit images.
-- Train a KNN classifier and evaluate accuracy/metrics.
-- Predict on new images.
+It trains a classifier on physical features (mass, width, height) extracted from visual inspection systems.
+Typical in agricultural sorting facilities, where produce needs to be rapidly classified for quality control, pricing, or packaging.
+
+# Objectives
+------------
+
+- Load and explore fruit feature data from visual inspection systems
+- Train and evaluate a kNN classifier for multi-class fruit classification
+- Analyze model performance and optimize hyperparameters
+- Visualize decision boundaries and performance metrics
+- Assess model sensitivity to training data size
+
+# Dataset
+---------
+
+Features: mass (g), width (cm), height (cm), color_score
+
+Target: fruit_label (1=apple, 2=mandarin, 3=orange, 4=lemon)
 
 # }}}
 """
@@ -24,42 +35,76 @@ from sklearn.neighbors import KNeighborsClassifier # importing classifier constr
 import warnings
 warnings.filterwarnings("ignore", message="Creating legend with loc=")
 
+# ==============[[ Load and Explore Data ]]=============={{{
+print(f"")
+print(68*"=")
+print(f"==={18*'='}[[ Load and Explore Data ]]{18*'='}==\n")
+# ==========================================================
+
+"""
+We begin by loading the fruit dataset and examining its structure. This step helps us understand what features are available for classification and ensures the data is in the expected format.
+"""
+
 fruits = pd.read_table('fruit_data_with_colors.txt')
 
 print(fruits.head())
 
-# print(fruits.columns) # Output: ['fruit_label', 'fruit_name', 'fruit_subtype', 'mass', 'width', 'height', 'color_score']
+print(f"\nFeature names:")
+print(fruits.columns) # Output: ['fruit_label', 'fruit_name', 'fruit_subtype', 'mass', 'width', 'height', 'color_score']
 
-print(f"")
+print(f"\nClass distribution:")
+print(fruits['fruit_name'].value_counts())
 
-# ===============[[ check missing data ]]================{{{
+# }}}
+
+# ===============[[ Data Quality Check ]]================{{{
 print(f"")
 print(68*"=")
-print(f"==={19*'='}[[ check missing data ]]{19*'='}===\n")
+print(f"==={19*'='}[[ Data Quality Check ]]{19*'='}===\n")
 # ==========================================================
+
+"""
+Before training any model, we check for missing values and examine the distribution of fruit classes. This ensures our data is clean and helps identify any class imbalance that might affect model performance.
+"""
 
 missing_data = fruits.isna().any()  # returns bool on columns
 cols_with_nan = fruits.columns[missing_data].to_list()
 print(f"")
 
+if cols_with_nan:
+    print(f"Columns with missing data: {cols_with_nan}")
+else:
+    print("No missing data found - dataset is clean")
+
+print(f"\nClass distribution:")
+print(fruits['fruit_name'].value_counts())
+
 # }}}
 
-# =========[[ fruit label and name dictionary ]]========={{{
+# ==========[[ Create Fruit Label Dictionary ]]=========={{{
 print(f"")
 print(68*"=")
-print(f"==={13*'='}[[ fruit label and name dictionary ]]{13*'='}==\n")
+print(f"==={14*'='}[[ Create Fruit Label Dictionary ]]{14*'='}==\n")
 # ==========================================================
+
+"""
+We create a dictionary to map between numeric labels and fruit names. This allows us to easily convert the model's numeric predictions back into human-readable fruit names.
+"""
 
 lookup_fruit_name = dict(zip(fruits.fruit_label.unique(), fruits.fruit_name.unique()))
 # print(lookup_fruit_name) # Output: {1: 'apple', 2: 'mandarin', 3: 'orange', 4: 'lemon'}
 
 # }}}
 
-# ================[[ train test split ]]================={{{
+# ================[[ Train-Test Split ]]================={{{
 print(f"")
 print(68*"=")
-print(f"==={20*'='}[[ train test split ]]{20*'='}===\n")
+print(f"==={20*'='}[[ Train-Test Split ]]{20*'='}===\n")
 # ==========================================================
+
+"""
+We split the data into training (75%) and testing (25%) sets. The training set is used to teach the model, while the test set evaluates how well it performs on unseen data, a crucial measure of real-world performance.
+"""
 
 X = fruits[['mass', 'width', 'height']]
 y = fruits['fruit_label']
@@ -68,11 +113,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 0)
 
 # }}}
 
-# ==========[[ learning with KNN classifier ]]==========={{{
+# ==============[[ Train KNN Classifier ]]==============={{{
 print(f"")
 print(68*"=")
-print(f"==={14*'='}[[ learning with KNN classifier ]]{14*'='}===\n")
+print(f"==={18*'='}[[ Train KNN Classifier ]]{18*'='}===\n")
 # ==========================================================
+
+"""
+Now we train our k-Nearest Neighbors classifier with k=5. The kNN algorithm classifies each fruit by looking at the 5 nearest training examples and taking a majority vote. We then evaluate its accuracy on the test set and demonstrate predictions on new samples.
+"""
 
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -89,11 +138,15 @@ print([lookup_fruit_name[label] for label in fruit_predictions])
 
 # }}}
 
-# ======[[ decision boudaries for KNN classifier ]]======{{{
+# ==========[[ Visualize Decision Boundaries ]]=========={{{
 print(f"")
 print(68*"=")
-print(f"==={10*'='}[[ decision boudaries for KNN classifier ]]{10*'='}==\n")
+print(f"==={14*'='}[[ Visualize Decision Boundaries ]]{14*'='}==\n")
 # ==========================================================
+
+"""
+This visualization shows how the classifier divides the feature space into regions. Each region corresponds to a fruit class, and any point falling in that region will be classified accordingly. This helps us understand how the model makes decisions.
+"""
 
 from utils import plot_fruit_knn
 
@@ -101,11 +154,15 @@ plot_fruit_knn(X_train, y_train, 5, 'uniform')
 
 # }}}
 
-# ============[[ classifier accuracy vs k ]]============={{{
+# ========[[ Hyperparameter tuning: Optimal k ]]========={{{
 print(f"")
 print(68*"=")
-print(f"==={16*'='}[[ classifier accuracy vs k ]]{16*'='}===\n")
+print(f"==={12*'='}[[ Hyperparameter tuning: Optimal k ]]{12*'='}===\n")
 # ==========================================================
+
+"""
+The choice of k (number of neighbors) significantly impacts performance. We test different k values to find the optimal balance: too small causes overfitting to noise, too large may miss important patterns. This systematic search helps us maximize accuracy.
+"""
 
 k_range = range(1, 20)
 scores = []
@@ -126,11 +183,15 @@ plt.show()
 
 # }}}
 
-# =====[[ classifier accuracy vs train/test split ]]====={{{
+# ===[[ Model Robustness: Training Set Size Analysis ]]===={{{
 print(f"")
 print(68*"=")
-print(f"==={9*'='}[[ classifier accuracy vs train/test split ]]{9*'='}==\n")
+print(f"==={6*'='}[[ Model Robustness: Training Set Size Analysis ]]{6*'='}===\n")
 # ==========================================================
+
+"""
+In real-world applications, data collection can be expensive. This experiment evaluates how much training data we actually need. We run 1000 experiments for each training set size to get reliable performance estimates. This tells us the minimum data requirements for production deployment.
+"""
 
 t = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
 
@@ -143,7 +204,7 @@ avg_scores = []
 
 for s in t:
     scores = []
-    for i in range(1, 1000):
+    for _ in range(1, 1000):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1 - s)
         knn.fit(X_train, y_train)
         scores.append(knn.score(X_test, y_test))

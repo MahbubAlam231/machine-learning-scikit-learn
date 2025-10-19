@@ -1,7 +1,7 @@
 """
 #!/usr/bin/python3
  Author(s)   : Mahbub Alam
- File        : KNN_fruit_detection.py
+ File        : Computer_Vision_in_Agriculture.py
  Created     : 2025-04-04 (Apr, Fri) 13:39:36 CEST
  Description : k-nearest neighbor classifier.# {{{
 A small script that trains and evaluates a k-nearest neighbors classifier for

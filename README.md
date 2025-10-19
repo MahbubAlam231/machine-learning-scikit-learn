@@ -2,7 +2,7 @@
 
 Includes machine learning classifier and regressors.
 
-## KNN_fruit_detection
+## Computer_Vision_in_Agriculture
 
 This project demonstrates a simple **K-Nearest Neighbors (KNN)** classifier applied to a **fruit dataset**.
 It shows how to use KNN for supervised classification, visualize decision boundaries, and evaluate model performance.
@@ -14,10 +14,10 @@ The project is based on an educational example from the *Applied Machine Learnin
 ### Jupyter Notebook
 
 For a full walkthrough with code, outputs, and visualizations, see the
-Jupyter Notebook [KNN_fruit_detection.ipynb](KNN_fruit_detection.ipynb)
+Jupyter Notebook [Computer_Vision_in_Agriculture.ipynb](Computer_Vision_in_Agriculture.ipynb)
 
 Run the notebook online (no setup required):
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MahbubAlam231/machine-learning-scikit-learn-pandas/main?filepath=KNN_fruit_detection.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MahbubAlam231/machine-learning-scikit-learn-pandas/main?filepath=Computer_Vision_in_Agriculture.ipynb)
 
 ---
 
